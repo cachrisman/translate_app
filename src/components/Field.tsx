@@ -69,17 +69,18 @@ const Field = (props: FieldProps) => {
     const {deeplApiKey} = (props.sdk.parameters.instance as AppInstanceParameters)
     const source_locale = props.sdk.locales.default
     const destination_locales = props.sdk.locales.available.filter(locale => {return locale !== source_locale})
-    destination_locales.map(locale => {
+    destination_locales.map(destination_locale => {
       translate({
         text: props.sdk.field.getValue(),
         source_lang: source_locale.slice(0,2).toUpperCase(),
-        target_lang: locale.slice(0,2).toUpperCase(),
+        target_lang: destination_locale.slice(0,2).toUpperCase(),
         auth_key: deeplApiKey,
       })
       .then((result: DeepLResponse)  => {
           let translated_text = result.data.translations[0].text
-          console.log(translated_text);
-          props.sdk.entry.fields[props.sdk.field.id].setValue(translated_text, locale)
+          let field_id = props.sdk.field.id
+          console.log(translated_text, field_id);
+          props.sdk.entry.fields[field_id].setValue(translated_text, destination_locale)
       })
       .catch((error:Error) => {
           console.error(error)
