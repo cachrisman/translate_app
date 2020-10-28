@@ -6,8 +6,6 @@ import {
   FieldExtensionSDK,
   SidebarExtensionSDK,
   DialogExtensionSDK,
-  EditorExtensionSDK,
-  PageExtensionSDK,
   BaseExtensionSDK,
   init,
   locations
@@ -17,8 +15,6 @@ import '@contentful/forma-36-fcss/dist/styles.css';
 import './index.css';
 
 import Config from './components/ConfigScreen';
-import EntryEditor from './components/EntryEditor';
-import Page from './components/Page';
 import Sidebar from './components/Sidebar';
 import Field from './components/Field';
 import Dialog from './components/Dialog';
@@ -30,17 +26,13 @@ init((sdk: BaseExtensionSDK) => {
   // Feel free to remove unused locations
   // Dont forget to delete the file too :)
   const ComponentLocationSettings = [
-    {
-      location: locations.LOCATION_APP_CONFIG,
-      component: <Config sdk={(sdk as unknown) as AppExtensionSDK} />
-    },
+    // {
+    //   location: locations.LOCATION_APP_CONFIG,
+    //   component: <Config sdk={(sdk as unknown) as AppExtensionSDK} />
+    // },
     {
       location: locations.LOCATION_ENTRY_FIELD,
       component: <Field sdk={(sdk as unknown) as FieldExtensionSDK} />
-    },
-    {
-      location: locations.LOCATION_ENTRY_EDITOR,
-      component: <EntryEditor sdk={(sdk as unknown) as EditorExtensionSDK} />
     },
     {
       location: locations.LOCATION_DIALOG,
@@ -49,10 +41,6 @@ init((sdk: BaseExtensionSDK) => {
     {
       location: locations.LOCATION_ENTRY_SIDEBAR,
       component: <Sidebar sdk={(sdk as unknown) as SidebarExtensionSDK} />
-    },
-    {
-      location: locations.LOCATION_PAGE,
-      component: <Page sdk={(sdk as unknown) as PageExtensionSDK} />
     }
   ];
 
