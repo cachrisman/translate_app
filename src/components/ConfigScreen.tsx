@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { AppExtensionSDK } from 'contentful-ui-extensions-sdk';
-import { Heading, Form, Workbench, Paragraph, TextField } from '@contentful/forma-36-react-components';
-import { css } from 'emotion';
+import { Heading, Form, Workbench, Paragraph, TextField, Card } from '@contentful/forma-36-react-components';
 
 export interface AppInstallationParameters {
   deeplApiKey: string;
@@ -67,7 +66,8 @@ export default class Config extends Component<ConfigProps, ConfigState> {
 
   render() {
     return (
-      <Workbench className={css({ margin: '80px' })}>
+      <Workbench.Content>
+        <Card>
         <Form>
           <Heading>App Config</Heading>
           <Paragraph>Welcome to the DeepL Translation App. In order to use this app, you need to have a DeepL Pro API account. <a href="https://www.deepl.com/pro#developer" target="_blank" rel="noreferrer">Click here to sign up for a new account</a> or <a href="https://www.deepl.com/pro-account.html" target="_blank" rel="noreferrer" >click here to visit your DeepL account summary</a> and copy your Authentication key. Then paste your DeepL API key below and click the Install or Save button in the upper right.</Paragraph>
@@ -80,7 +80,8 @@ export default class Config extends Component<ConfigProps, ConfigState> {
             onChange={this.updateApiKey}
           />
         </Form>
-      </Workbench>
+      </Card>
+      </Workbench.Content>
     );
   }
 }
