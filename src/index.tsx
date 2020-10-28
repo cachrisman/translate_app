@@ -26,10 +26,10 @@ init((sdk: BaseExtensionSDK) => {
   // Feel free to remove unused locations
   // Dont forget to delete the file too :)
   const ComponentLocationSettings = [
-    // {
-    //   location: locations.LOCATION_APP_CONFIG,
-    //   component: <Config sdk={(sdk as unknown) as AppExtensionSDK} />
-    // },
+    {
+      location: locations.LOCATION_APP_CONFIG,
+      component: <Config sdk={(sdk as unknown) as AppExtensionSDK} />
+    },
     {
       location: locations.LOCATION_ENTRY_FIELD,
       component: <Field sdk={(sdk as unknown) as FieldExtensionSDK} />
