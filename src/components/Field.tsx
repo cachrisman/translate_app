@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Button } from '@contentful/forma-36-react-components';
 import { FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
 import { SingleLineEditor } from '@contentful/field-editor-single-line';
+import { MultipleLineEditor } from '@contentful/field-editor-multiple-line';
 const translate = require("deepl");
 
 interface FieldProps {
@@ -30,6 +31,7 @@ const Field = (props: FieldProps) => {
   const translateField = () => {
     console.log("Field -> translateField")
     const {deeplApiKey} = (props.sdk.parameters.installation as AppInstallationParameters)
+    console.log("translateField -> deeplApiKey", deeplApiKey)
     const source_locale = props.sdk.locales.default
     const destination_locales = props.sdk.locales.available.filter(locale => {return locale !== source_locale})
     destination_locales.forEach(destination_locale => {
@@ -37,7 +39,7 @@ const Field = (props: FieldProps) => {
         text: props.sdk.field.getValue(),
         source_lang: source_locale.slice(0,2).toUpperCase(),
         target_lang: destination_locale.slice(0,2).toUpperCase(),
-        auth_key: deeplApiKey,
+        auth_key: deeplApiKey
       }).then((result: DeepLResponse)  => {
         let translated_text = result.data.translations[0].text
         let field_id = props.sdk.field.id
@@ -49,17 +51,28 @@ const Field = (props: FieldProps) => {
 
   const current_locale = props.sdk.field.locale
   const default_locale = props.sdk.locales.default
+
+  let field
+  if (props.sdk.field.type === "Symbol") {
+    field = <SingleLineEditor field={props.sdk.field} locales={props.sdk.locales} />
+  } else if (props.sdk.field.type === "Text") {
+    field = <MultipleLineEditor field={props.sdk.field} locales={props.sdk.locales} />
+  }
+
   let button = null
   if (current_locale === default_locale) button = <Button 
+    className="translate-button"
     icon="Language" 
     buttonType="muted" 
     onClick={translateField} >
       Translate
   </Button>
 
+  console.log(props.sdk.field)
+
   return (
     <div>
-      <SingleLineEditor field={props.sdk.field} locales={props.sdk.locales} />
+      { field } 
       { button }
     </div>
   )
