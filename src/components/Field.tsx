@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@contentful/forma-36-react-components';
 import { FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
 import { SingleLineEditor } from '@contentful/field-editor-single-line';
@@ -21,52 +21,48 @@ interface DeepLResponse {
   }
 }
 
-// const Field = (props: FieldProps) => {
-export default class Field extends React.Component<FieldProps> {
-  constructor(props: FieldProps) {
-    super(props);
-    this.state = {};
-  }
+const Field = (props: FieldProps) => {
 
-  componentDidMount() {
-    this.props.sdk.window.startAutoResizer();
-  }
+  useEffect(() => {
+    props.sdk.window.startAutoResizer();
+  })
 
-  translateField() {
-    const {deeplApiKey} = (this.props.sdk.parameters.installation as AppInstallationParameters)
-    const source_locale = this.props.sdk.locales.default
-    const destination_locales = this.props.sdk.locales.available.filter(locale => {return locale !== source_locale})
+  const translateField = () => {
+    console.log("Field -> translateField")
+    const {deeplApiKey} = (props.sdk.parameters.installation as AppInstallationParameters)
+    const source_locale = props.sdk.locales.default
+    const destination_locales = props.sdk.locales.available.filter(locale => {return locale !== source_locale})
     destination_locales.forEach(destination_locale => {
       translate({
-        text: this.props.sdk.field.getValue(),
+        text: props.sdk.field.getValue(),
         source_lang: source_locale.slice(0,2).toUpperCase(),
         target_lang: destination_locale.slice(0,2).toUpperCase(),
         auth_key: deeplApiKey,
       }).then((result: DeepLResponse)  => {
         let translated_text = result.data.translations[0].text
-        let field_id = this.props.sdk.field.id
-        this.props.sdk.entry.fields[field_id].setValue(translated_text, destination_locale)
+        let field_id = props.sdk.field.id
+        props.sdk.entry.fields[field_id].setValue(translated_text, destination_locale)
         console.log(translated_text);
       }).catch((error:Error) => console.error);
     })
   }
 
-  render() {
-    const current_locale = this.props.sdk.field.locale
-    const default_locale = this.props.sdk.locales.default
-    let button = null
-    if (current_locale === default_locale) button = <Button 
-      icon="Language" 
-      buttonType="muted" 
-      onClick={this.translateField} >
-        Translate
-    </Button>
+  const current_locale = props.sdk.field.locale
+  const default_locale = props.sdk.locales.default
+  let button = null
+  if (current_locale === default_locale) button = <Button 
+    icon="Language" 
+    buttonType="muted" 
+    onClick={translateField} >
+      Translate
+  </Button>
 
-    return (
-      <div>
-        <SingleLineEditor field={this.props.sdk.field} locales={this.props.sdk.locales} />
-        { button }
-      </div>
-    )
-  }
+  return (
+    <div>
+      <SingleLineEditor field={props.sdk.field} locales={props.sdk.locales} />
+      { button }
+    </div>
+  )
 };
+
+export default Field;
